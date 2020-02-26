@@ -1,0 +1,37 @@
+#filtre {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px 20px 20px;
+}
+
+.container-star {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.container-star input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  z-index: 1;
+  margin: 0;
+}
+
+.checkmark-filtre {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-image: url(../images/star.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 40%;
+}
+
+.container-star:hover input ~ .checkmark-filtre, .container-star input:checked ~ .checkmark-filtre {
+  opacity: 100%;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>EatHere</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/filtre.css">
+  <script defer src="json/resto.json"></script>
+  <script defer src="js/generateMap.js"></script>
+  <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c&language=fr&region=FR&callback=initMap">
+  </script>
+  <script defer src="js/placementResto.js"></script>
+
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+</head>
+
+<body>
+  <div id="container-page">
+    <div id="map"></div>
+    <div id="container-infos">
+      <div id="filtre">
+        <div class="container-star">
+          <input type="checkbox" name="filtre" value="1">
+          <span class="checkmark-filtre"></span>
+        </div>
+        <div class="container-star">
+          <input type="checkbox" name="filtre" value="2">
+          <span class="checkmark-filtre"></span>
+        </div>
+        <div class="container-star">
+          <input type="checkbox" name="filtre" value="3">
+          <span class="checkmark-filtre"></span>
+        </div>
+        <div class="container-star">
+          <input type="checkbox" name="filtre" value="4">
+          <span class="checkmark-filtre"></span>
+        </div>
+        <div class="container-star">
+          <input type="checkbox" name="filtre" value="5">
+          <span class="checkmark-filtre"></span>
+        </div>
+      </div>
+      <div id="container-fiches-restos">
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

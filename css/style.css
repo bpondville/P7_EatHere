@@ -1,0 +1,65 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: gainsboro;
+}
+
+#container-page {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  width: calc(100vw - 280px);
+}
+
+#container-infos {
+  width: 240px;
+  background-color: white;
+  height: 100%;
+  padding: 40px 20px 0px 20px;
+}
+
+#container-fiches-restos {
+  margin-top: 40px;
+}
+
+.fiche-resto {
+  width: 200px;
+  height: 58px;
+  box-shadow:  0px 2px 5px rgba(0, 0, 0, 0.20);
+  border-radius: 5px;
+  padding: 15px 20px 10px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.container-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container-note .star {
+  width: 18px;
+  margin-left: 5px;
+}
+
+.note-txt {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
