@@ -54,8 +54,7 @@ h1 {
 }
 
 .container-note .star {
-  width: 18px;
-  margin-right: 5px;
+  width: 115px;
 }
 
 .note-txt {
@@ -63,4 +62,9 @@ h1 {
   font-family: 'Nunito', sans-serif;
   font-size: 14px;
   font-weight: 400;
+}
+
+.container-stars {
+  display: flex;
+  overflow: hidden;
 }

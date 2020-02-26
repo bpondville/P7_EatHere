@@ -112,12 +112,13 @@ const actualiseListResto = () => {
 
     let containerStars = document.createElement('div');
     containerStars.classList.add('container-stars');
-    containerStars.insertAdjacentHTML('beforeend', '<img class="star" src="images/star.svg"><img class="star" src="images/star.svg"><img class="star" src="images/star.svg"><img class="star" src="images/star.svg"><img class="star" src="images/star.svg">');
+    containerStars.style.width = (moyenneNote * 115 / 5) + 'px';
+    containerStars.insertAdjacentHTML('beforeend', '<img class="star" src="images/moyenne.svg">');
 
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
 
-    noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5')
+    noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5')
 
     ficheResto.insertAdjacentElement('beforeend', h1NameResto);
     containerNote.insertAdjacentElement('beforeend', containerStars);
