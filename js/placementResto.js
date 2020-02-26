@@ -7,33 +7,52 @@ request.responseType = 'json';
 request.send();
 request.onload = function () { // A la réponse du serveur :
   arrayRestos = request.response;
-  placeMarkers();
   getFiltre();
+  placeMarkers();
   actualiseListResto();
 }
 
+let arrayMarkers = [];
+
 const placeMarkers = () => {
+  arrayMarkers.forEach(marker => {
+    marker.setMap(null);
+  });
   arrayRestos.forEach(resto => {
     let restoLatLng = {
       lat: resto.lat,
       lng: resto.long,
     }
 
-    let markerPosResto = new google.maps.Marker({
-      position: restoLatLng,
-      map: map,
-      icon: {
-        url: '../images/posResto.svg',
-        labelOrigin: new google.maps.Point(20, -8),
-      },
-      title: resto.restaurantName,
-      label: {
-        text: resto.restaurantName,
-        fontSize: '14px',
-        fontWeight: '500'
-      }
+    let totalNote = 0;
+    let nrbNote = 0;
+    let moyenneNote = 0;
+
+    resto.ratings.forEach(note => {
+      totalNote += note.stars;
+      nrbNote++;
+      moyenneNote = totalNote / nrbNote;
     });
+
+    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+      let markerPosResto = new google.maps.Marker({
+        position: restoLatLng,
+        map: map,
+        icon: {
+          url: '../images/posResto.svg',
+          labelOrigin: new google.maps.Point(20, -8),
+        },
+        title: resto.restaurantName,
+        label: {
+          text: resto.restaurantName,
+          fontSize: '14px',
+          fontWeight: '500'
+        }
+      });
+      arrayMarkers.push(markerPosResto);
+    }
   });
+
 }
 
 const getFiltre = () => {
@@ -65,6 +84,7 @@ const getFiltre = () => {
       document.querySelectorAll('.checkbox')[i - 1].classList.add('active-star');
     }
     actualiseListResto();
+    placeMarkers();
   });
 }
 
@@ -104,9 +124,7 @@ const actualiseListResto = () => {
     containerNote.insertAdjacentElement('beforeend', noteTxt);
     ficheResto.insertAdjacentElement('beforeend', containerNote);
 
-    if (moyenneNote >= value1 && moyenneNote <= value2) {
-      document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
-    } else if (value1 == undefined && value2 == undefined) {
+    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
     }
 

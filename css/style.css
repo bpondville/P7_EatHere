@@ -29,7 +29,7 @@ html, body {
 
 .fiche-resto {
   width: 200px;
-  height: 58px;
+  min-height: 58px;
   box-shadow:  0px 2px 5px rgba(0, 0, 0, 0.20);
   border-radius: 5px;
   padding: 15px 20px 10px 20px;
@@ -50,11 +50,12 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 }
 
 .container-note .star {
   width: 18px;
-  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .note-txt {

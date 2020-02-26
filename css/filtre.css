@@ -32,6 +32,6 @@
   opacity: 40%;
 }
 
-.container-star:hover input ~ .checkmark-filtre, .container-star input:checked ~ .checkmark-filtre {
+.container-star:hover input ~ .checkmark-filtre, .container-star input:checked ~ .checkmark-filtre, .active-star ~ .checkmark-filtre {
   opacity: 100%;
 }
