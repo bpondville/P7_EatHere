@@ -1,4 +1,4 @@
-let arrayRestos;
+let arrayRestos, value1, value2;
 
 let request = new XMLHttpRequest();
 let requestUrl = '../json/resto.json';
@@ -8,7 +8,8 @@ request.send();
 request.onload = function () { // A la réponse du serveur :
   arrayRestos = request.response;
   placeMarkers();
-  creationListRestos();
+  getFiltre();
+  actualiseListResto();
 }
 
 const placeMarkers = () => {
@@ -35,9 +36,51 @@ const placeMarkers = () => {
   });
 }
 
-const creationListRestos = () => {
+const getFiltre = () => {
+  document.getElementById('filtre').addEventListener('click', function () {
+    value1 = undefined;
+    value2 = undefined;
+    let arrayCheckboxChecked = document.querySelectorAll('.checkbox:checked');
+    let arrayCheckbox = document.querySelectorAll('.checkbox');
+
+    arrayCheckbox.forEach(checkbox => {
+      checkbox.classList.remove('active-star');
+    });
+
+    if (arrayCheckboxChecked[0] !== undefined) {
+      value1 = arrayCheckboxChecked[0].value;
+    }
+
+    if (arrayCheckboxChecked[1] !== undefined) {
+      value2 = arrayCheckboxChecked[1].value;
+    }
+
+    if (arrayCheckboxChecked.length >= 2) {
+      arrayCheckboxChecked.forEach(checkbox => {
+        checkbox.checked = false;
+      });
+    }
+
+    for (let i = value1; i <= value2; i++) {
+      document.querySelectorAll('.checkbox')[i - 1].classList.add('active-star');
+    }
+    actualiseListResto();
+  });
+}
+
+const actualiseListResto = () => {
   document.getElementById('container-fiches-restos').innerHTML = '';
   arrayRestos.forEach(resto => {
+    let totalNote = 0;
+    let nrbNote = 0;
+    let moyenneNote = 0;
+
+    resto.ratings.forEach(note => {
+      totalNote += note.stars;
+      nrbNote++;
+      moyenneNote = totalNote / nrbNote;
+    });
+
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
 
@@ -54,16 +97,6 @@ const creationListRestos = () => {
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
 
-    let totalNote = 0;
-    let nrbNote = 0;
-    let moyenneNote = 0;
-
-    resto.ratings.forEach(note => {
-      totalNote += note.stars;
-      nrbNote++;
-      moyenneNote = totalNote / nrbNote;
-    });
-
     noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5')
 
     ficheResto.insertAdjacentElement('beforeend', h1NameResto);
@@ -71,6 +104,11 @@ const creationListRestos = () => {
     containerNote.insertAdjacentElement('beforeend', noteTxt);
     ficheResto.insertAdjacentElement('beforeend', containerNote);
 
-    document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
+    if (moyenneNote >= value1 && moyenneNote <= value2) {
+      document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
+    } else if (value1 == undefined && value2 == undefined) {
+      document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
+    }
+
   });
 }
