@@ -1,38 +1,132 @@
-[
-  {
-     "restaurantName":"Menma",
-     "address":"Avenue des Saisons 123, 1050 Ixelles",
-     "lat":50.817949,
-     "long":4.388199,
-     "ratings":[
-        {
-           "stars":5,
-           "comment":"Super ! C'était excellent, les ramens sont délicieux !"
-        },
-        {
-           "stars":4,
-           "comment":"Excellents Ramen. Le choix de la carte est limité mais c'est délicieux ! Le Ramen piquant est véritablement une découverte."
-        },
-        {
-           "stars":3,
-           "comment":"Bon sans plus. Choix assez limité."
-        }
-     ]
-  },
-  {
-     "restaurantName":"Burger 66",
-     "address":"Avenue Adolphe Buyl 104, 1050 Ixelles",
-     "lat":50.816427,
-     "long":4.382903,
-     "ratings":[
-        {
-           "stars":4,
-           "comment":"Des burgers excellents mais un peu cher !"
-        },
-        {
-           "stars":5,
-           "comment":"Parfait ! Rien à dire !"
-        }
-     ]
-  }
+[{
+   "restaurantName": "Menma",
+   "address": "Avenue des Saisons 123, 1050 Ixelles",
+   "lat": 50.817949,
+   "long": 4.388199,
+   "ratings": [{
+       "stars": 5,
+       "comment": "Super ! C'était excellent, les ramens sont délicieux !"
+     },
+     {
+       "stars": 4,
+       "comment": "Excellents Ramen. Le choix de la carte est limité mais c'est délicieux ! Le Ramen piquant est véritablement une découverte."
+     },
+     {
+       "stars": 3,
+       "comment": "Bon sans plus. Choix assez limité."
+     }
+   ]
+ },
+ {
+   "restaurantName": "Burger 66",
+   "address": "Avenue Adolphe Buyl 104, 1050 Ixelles",
+   "lat": 50.816427,
+   "long": 4.382903,
+   "ratings": [{
+       "stars": 4,
+       "comment": "Des burgers excellents mais un peu cher !"
+     },
+     {
+       "stars": 5,
+       "comment": "Parfait ! Rien à dire !"
+     }
+   ]
+ },
+ {
+   "restaurantName": "EXKi Université",
+   "address": "Avenue de l'Université 22, 1050 Bruxelles",
+   "lat": 50.815385,
+   "long": 4.388747,
+   "ratings": [{
+       "stars": 2,
+       "comment": "Très cher pour ce que c'est !"
+     },
+     {
+       "stars": 4,
+       "comment": "Très bon mais petite quantité"
+     }
+   ]
+ },
+ {
+   "restaurantName": "BAVET",
+   "address": "Chaussée de Boondael 413, 1050 Ixelles",
+   "lat": 50.817347,
+   "long": 4.388339,
+   "ratings": [{
+       "stars": 4,
+       "comment": "Chouette concept, mais il n'y a pas assez de choix !"
+     },
+     {
+       "stars": 3,
+       "comment": "Prix très accessible, mais la qualité peut être améliorée !"
+     },
+     {
+       "stars": 5,
+       "comment": "Génial, je reviendrai sans hésiter !"
+     }
+   ]
+ },
+ {
+   "restaurantName": "Sogno d'Italia",
+   "address": "Chaussée de Boondael 428, 1050 Ixelles",
+   "lat": 50.817348,
+   "long": 4.388925,
+   "ratings": [{
+       "stars": 1,
+       "comment": "Nous avons été malade après avoir mangé là-bas...."
+     },
+     {
+       "stars": 3,
+       "comment": "Tous nos plats étaient bons mais trop épicés."
+     },
+     {
+       "stars": 5,
+       "comment": "Un vrai voyage en Italie, c'était un délice."
+     },
+     {
+       "stars": 4,
+       "comment": "Bon rapport qualité/prix."
+     }
+   ]
+ },
+ {
+   "restaurantName": "Tapas Y Mas",
+   "address": "Chaussée de Boondael 372, 1050 Bruxelles",
+   "lat": 50.817990,
+   "long": 4.386608,
+   "ratings": [{
+     "stars": 2,
+     "comment": "Service peu agréable et tapas insipides."
+   }]
+ },
+ {
+   "restaurantName": "Le Picwick la Braisiere",
+   "address": "Avenue Adolphe Buyl 79, 1050 Ixelles",
+   "lat": 50.816121,
+   "long": 4.382998,
+   "ratings": [{
+       "stars": 1,
+       "comment": "Cher et de mauvaise qualité."
+     },
+     {
+       "stars": 4,
+       "comment": "Très bon et service rapide"
+     }
+   ]
+ },
+ {
+   "restaurantName": "Snack Twins Resto",
+   "address": "Avenue de l'Hippodrome, 1050 Ixelles",
+   "lat": 50.818527,
+   "long": 4.379478,
+   "ratings": [{
+       "stars": 2,
+       "comment": "Trop cher pour une quantité ridicule."
+     },
+     {
+       "stars": 1,
+       "comment": "Plus jamais. Service long, désagréable et nourriture infecte."
+     }
+   ]
+ }
 ]
