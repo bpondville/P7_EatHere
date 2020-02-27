@@ -6,7 +6,7 @@ function initMap() {
       lat: 48.875044,
       lng: 2.350477
     },
-    zoom: 14,
+    zoom: 16,
     fullscreenControl: false,
     styles: [{
         "featureType": "landscape.man_made",
