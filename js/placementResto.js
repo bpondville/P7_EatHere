@@ -1,16 +1,17 @@
 let arrayRestos, value1, value2;
 
 let request = new XMLHttpRequest();
+request.onreadystatechange = function () {
+  if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+    arrayRestos = JSON.parse(this.responseText);
+    getFiltre();
+    placeMarkers();
+    actualiseListResto();
+  }
+};
 let requestUrl = '../json/resto.json';
 request.open('GET', requestUrl);
-request.responseType = 'json';
 request.send();
-request.onload = function () { // A la réponse du serveur :
-  arrayRestos = request.response;
-  getFiltre();
-  placeMarkers();
-  actualiseListResto();
-}
 
 let arrayMarkers = [];
 
@@ -118,7 +119,7 @@ const actualiseListResto = () => {
     noteTxt.classList.add('note-txt');
 
     if (Number.isInteger(moyenneNote)) {
-    noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5');
+      noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5');
     } else {
       noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5');
     }
