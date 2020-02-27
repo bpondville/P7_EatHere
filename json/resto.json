@@ -1,8 +1,8 @@
 [{
    "restaurantName": "Menma",
    "address": "Avenue des Saisons 123, 1050 Ixelles",
-   "lat": 50.817949,
-   "long": 4.388199,
+   "lat": 50.817708,
+   "long": 4.388255,
    "ratings": [{
        "stars": 5,
        "comment": "Super ! C'était excellent, les ramens sont délicieux !"
@@ -20,8 +20,8 @@
  {
    "restaurantName": "Burger 66",
    "address": "Avenue Adolphe Buyl 104, 1050 Ixelles",
-   "lat": 50.816427,
-   "long": 4.382903,
+   "lat": 50.816231,
+   "long": 4.382772,
    "ratings": [{
        "stars": 4,
        "comment": "Des burgers excellents mais un peu cher !"
