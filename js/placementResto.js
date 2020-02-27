@@ -52,7 +52,6 @@ const placeMarkers = () => {
       arrayMarkers.push(markerPosResto);
     }
   });
-
 }
 
 const getFiltre = () => {
@@ -118,7 +117,11 @@ const actualiseListResto = () => {
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
 
-    noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5')
+    if (Number.isInteger(moyenneNote)) {
+    noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5');
+    } else {
+      noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5');
+    }
 
     ficheResto.insertAdjacentElement('beforeend', h1NameResto);
     containerNote.insertAdjacentElement('beforeend', containerStars);
