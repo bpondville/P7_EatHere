@@ -128,5 +128,20 @@
        "comment": "Plus jamais. Service long, désagréable et nourriture infecte."
      }
    ]
- }
+ },
+ {
+  "restaurantName": "Le Crabe Fantôme",
+  "address": "Avenue du Bois de la Cambre 17/C, 1170 Watermael-Boitsfort",
+  "lat": 50.809845,
+  "long": 4.395853,
+  "ratings": [{
+      "stars": 5,
+      "comment": "Toujours très bien. Bonne ambiance. On y mange bien."
+    },
+    {
+      "stars": 5,
+      "comment": "Les repas sont toujours aussi délicieux. Un décor et un accueil chaleureux. Parmi les meilleurs restaurants du coin à recommander."
+    }
+  ]
+}
 ]
