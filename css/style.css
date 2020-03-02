@@ -49,6 +49,14 @@ h1 {
   font-weight: 700;
 }
 
+.apercuStreetView {
+  height: 0px;
+  width: 240px;
+  margin: -20px 0 10px -20px;
+  border-radius: 5px 5px 0px 0px;
+  transition: ease-out 0.5s;
+}
+
 .container-note {
   display: flex;
   align-items: center;

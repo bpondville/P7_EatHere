@@ -5,8 +5,7 @@ request.onreadystatechange = function () {
   if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
     arrayRestos = JSON.parse(this.responseText);
     getFiltre();
-    placeMarkers();
-    actualiseListResto();
+    placementRestos();
   }
 };
 let requestUrl = '../json/resto.json';
@@ -14,46 +13,6 @@ request.open('GET', requestUrl);
 request.send();
 
 let arrayMarkers = [];
-
-const placeMarkers = () => {
-  arrayMarkers.forEach(marker => {
-    marker.setMap(null);
-  });
-  arrayRestos.forEach(resto => {
-    let restoLatLng = {
-      lat: resto.lat,
-      lng: resto.long,
-    }
-
-    let totalNote = 0;
-    let nrbNote = 0;
-    let moyenneNote = 0;
-
-    resto.ratings.forEach(note => {
-      totalNote += note.stars;
-      nrbNote++;
-      moyenneNote = totalNote / nrbNote;
-    });
-
-    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
-      let markerPosResto = new google.maps.Marker({
-        position: restoLatLng,
-        map: map,
-        icon: {
-          url: '../images/posResto.svg',
-          labelOrigin: new google.maps.Point(20, -8),
-        },
-        title: resto.restaurantName,
-        label: {
-          text: resto.restaurantName,
-          fontSize: '14px',
-          fontWeight: '500'
-        }
-      });
-      arrayMarkers.push(markerPosResto);
-    }
-  });
-}
 
 const getFiltre = () => {
   document.getElementById('filtre').addEventListener('click', function () {
@@ -83,14 +42,22 @@ const getFiltre = () => {
     for (let i = value1; i <= value2; i++) {
       document.querySelectorAll('.checkbox')[i - 1].classList.add('active-star');
     }
-    actualiseListResto();
-    placeMarkers();
+    placementRestos();
   });
 }
 
-const actualiseListResto = () => {
+const placementRestos = () => {
   document.getElementById('container-fiches-restos').innerHTML = '';
+  arrayMarkers.forEach(marker => {
+    marker.setMap(null);
+  });
   arrayRestos.forEach(resto => {
+
+    let restoLatLng = {
+      lat: resto.lat,
+      lng: resto.long,
+    }
+
     let totalNote = 0;
     let nrbNote = 0;
     let moyenneNote = 0;
@@ -124,14 +91,54 @@ const actualiseListResto = () => {
       noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5');
     }
 
-    ficheResto.insertAdjacentElement('beforeend', h1NameResto);
     containerNote.insertAdjacentElement('beforeend', containerStars);
     containerNote.insertAdjacentElement('beforeend', noteTxt);
+    ficheResto.insertAdjacentElement('beforeend', h1NameResto);
     ficheResto.insertAdjacentElement('beforeend', containerNote);
 
     if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
     }
 
+    ficheResto.addEventListener('click', function () {
+      let allApercuBaliseImg = document.querySelectorAll('.apercuStreetView');
+      allApercuBaliseImg.forEach(img => {
+        img.remove();
+      });
+
+      let apercuStreetView = document.createElement('img');
+      apercuStreetView.classList.add('apercuStreetView');
+      ficheResto.insertAdjacentElement('afterbegin', apercuStreetView);
+      let urlApercu = 'https://maps.googleapis.com/maps/api/streetview?size=240x150&location=' + restoLatLng.lat + ',' + restoLatLng.lng + '&source=outdoor&pitch=0&key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c';
+      apercuStreetView.src = urlApercu;
+      apercuStreetView.style.height = '150px';
+    });
+
+
+
+    // PLACEMENT DES MARKERS
+    resto.ratings.forEach(note => {
+      totalNote += note.stars;
+      nrbNote++;
+      moyenneNote = totalNote / nrbNote;
+    });
+
+    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+      let markerPosResto = new google.maps.Marker({
+        position: restoLatLng,
+        map: map,
+        icon: {
+          url: '../images/posResto.svg',
+          labelOrigin: new google.maps.Point(20, -8),
+        },
+        title: resto.restaurantName,
+        label: {
+          text: resto.restaurantName,
+          fontSize: '14px',
+          fontWeight: '500'
+        }
+      });
+      arrayMarkers.push(markerPosResto);
+    }
   });
 }
