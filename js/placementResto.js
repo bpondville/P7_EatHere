@@ -60,31 +60,11 @@ const placementRestos = () => {
     let nrbNote = 0;
     let moyenneNote = 0;
 
-
-    // PLACEMENT DES MARKERS
     resto.ratings.forEach(note => {
       totalNote += note.stars;
       nrbNote++;
       moyenneNote = totalNote / nrbNote;
     });
-
-    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
-      markerPosResto = new google.maps.Marker({
-        position: restoLatLng,
-        map: map,
-        icon: {
-          url: '../images/posResto.svg',
-          labelOrigin: new google.maps.Point(20, -8),
-        },
-        title: resto.restaurantName,
-        label: {
-          text: resto.restaurantName,
-          fontSize: '14px',
-          fontWeight: '500'
-        }
-      });
-      arrayMarkers.push(markerPosResto);
-    }
 
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
@@ -118,7 +98,7 @@ const placementRestos = () => {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
     }
 
-    ficheResto.addEventListener('click', function () {
+    const expand = () => {
       let allApercuBaliseImg = document.querySelectorAll('.apercuStreetView');
       allApercuBaliseImg.forEach(img => {
         img.remove();
@@ -159,7 +139,34 @@ const placementRestos = () => {
       });
 
       ficheResto.insertAdjacentElement('beforeend', expandContainer);
+    }
 
+    // PLACEMENT DES MARKERS
+    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+      markerPosResto = new google.maps.Marker({
+        position: restoLatLng,
+        map: map,
+        icon: {
+          url: '../images/posResto.svg',
+          labelOrigin: new google.maps.Point(20, -8),
+        },
+        title: resto.restaurantName,
+        label: {
+          text: resto.restaurantName,
+          fontSize: '14px',
+          fontWeight: '500'
+        }
+      });
+      arrayMarkers.push(markerPosResto);
+    }
+
+    ficheResto.addEventListener('click', function () {
+      expand();
     });
+
+    markerPosResto.addListener('click', function () {
+      expand();
+    });
+
   });
 }
