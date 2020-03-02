@@ -1,4 +1,5 @@
-let arrayRestos, value1, value2;
+let arrayRestos, value1, value2, markerPosResto;
+let arrayMarkers = [];
 
 let request = new XMLHttpRequest();
 request.onreadystatechange = function () {
@@ -11,8 +12,6 @@ request.onreadystatechange = function () {
 let requestUrl = '../json/resto.json';
 request.open('GET', requestUrl);
 request.send();
-
-let arrayMarkers = [];
 
 const getFiltre = () => {
   document.getElementById('filtre').addEventListener('click', function () {
@@ -52,7 +51,6 @@ const placementRestos = () => {
     marker.setMap(null);
   });
   arrayRestos.forEach(resto => {
-
     let restoLatLng = {
       lat: resto.lat,
       lng: resto.long,
@@ -62,11 +60,31 @@ const placementRestos = () => {
     let nrbNote = 0;
     let moyenneNote = 0;
 
+
+    // PLACEMENT DES MARKERS
     resto.ratings.forEach(note => {
       totalNote += note.stars;
       nrbNote++;
       moyenneNote = totalNote / nrbNote;
     });
+
+    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+      markerPosResto = new google.maps.Marker({
+        position: restoLatLng,
+        map: map,
+        icon: {
+          url: '../images/posResto.svg',
+          labelOrigin: new google.maps.Point(20, -8),
+        },
+        title: resto.restaurantName,
+        label: {
+          text: resto.restaurantName,
+          fontSize: '14px',
+          fontWeight: '500'
+        }
+      });
+      arrayMarkers.push(markerPosResto);
+    }
 
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
@@ -106,39 +124,42 @@ const placementRestos = () => {
         img.remove();
       });
 
+      let allExpandContainer = document.querySelectorAll('.expand-container');
+      allExpandContainer.forEach(expand => {
+        expand.remove();
+      });
+
       let apercuStreetView = document.createElement('img');
       apercuStreetView.classList.add('apercuStreetView');
       ficheResto.insertAdjacentElement('afterbegin', apercuStreetView);
       let urlApercu = 'https://maps.googleapis.com/maps/api/streetview?size=240x150&location=' + restoLatLng.lat + ',' + restoLatLng.lng + '&source=outdoor&pitch=0&key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c';
       apercuStreetView.src = urlApercu;
       apercuStreetView.style.height = '150px';
-    });
 
+      let expandContainer = document.createElement('div');
+      expandContainer.classList.add('expand-container');
 
+      let adresse = document.createElement('p');
+      adresse.classList.add('adresse');
+      adresse.innerText = resto.address;
+      expandContainer.insertAdjacentElement('beforeend', adresse);
 
-    // PLACEMENT DES MARKERS
-    resto.ratings.forEach(note => {
-      totalNote += note.stars;
-      nrbNote++;
-      moyenneNote = totalNote / nrbNote;
-    });
+      resto.ratings.forEach(avis => {
 
-    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
-      let markerPosResto = new google.maps.Marker({
-        position: restoLatLng,
-        map: map,
-        icon: {
-          url: '../images/posResto.svg',
-          labelOrigin: new google.maps.Point(20, -8),
-        },
-        title: resto.restaurantName,
-        label: {
-          text: resto.restaurantName,
-          fontSize: '14px',
-          fontWeight: '500'
-        }
+        let note = document.createElement('p');
+        note.classList.add('note-avis');
+        note.innerText = avis.stars + '/5';
+
+        let comment = document.createElement('p');
+        comment.classList.add('comment');
+        comment.innerText = avis.comment;
+
+        expandContainer.insertAdjacentElement('beforeend', note);
+        expandContainer.insertAdjacentElement('beforeend', comment);
       });
-      arrayMarkers.push(markerPosResto);
-    }
+
+      ficheResto.insertAdjacentElement('beforeend', expandContainer);
+
+    });
   });
 }
