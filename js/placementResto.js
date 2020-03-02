@@ -50,6 +50,7 @@ const placementRestos = () => {
   arrayMarkers.forEach(marker => {
     marker.setMap(null);
   });
+
   arrayRestos.forEach(resto => {
     let restoLatLng = {
       lat: resto.lat,
@@ -139,6 +140,10 @@ const placementRestos = () => {
       });
 
       ficheResto.insertAdjacentElement('beforeend', expandContainer);
+
+      if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+        document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheResto);
+      }
     }
 
     // PLACEMENT DES MARKERS
