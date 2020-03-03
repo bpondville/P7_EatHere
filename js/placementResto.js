@@ -1,6 +1,8 @@
 let arrayRestos, value1, value2, markerPosResto;
 let arrayMarkers = [];
 
+
+/* --- RECUPERATION DU JSON --- */
 let request = new XMLHttpRequest();
 request.onreadystatechange = function () {
   if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -13,6 +15,9 @@ let requestUrl = '../json/resto.json';
 request.open('GET', requestUrl);
 request.send();
 
+
+
+/* --- CREATION DU FILTRE --- */
 const getFiltre = () => {
   document.getElementById('filtre').addEventListener('click', function () {
     value1 = undefined;
@@ -45,9 +50,12 @@ const getFiltre = () => {
   });
 }
 
+
+
+/* --- FONCTION DE PLACEMENT DES RESTAURANTS --- */
 const placementRestos = () => {
   document.getElementById('container-fiches-restos').innerHTML = '';
-  arrayMarkers.forEach(marker => {
+  arrayMarkers.forEach(marker => { // On retire tous les markers
     marker.setMap(null);
   });
 
@@ -55,7 +63,7 @@ const placementRestos = () => {
     let restoLatLng = {
       lat: resto.lat,
       lng: resto.long,
-    }
+    };
 
     let totalNote = 0;
     let nrbNote = 0;
@@ -84,10 +92,10 @@ const placementRestos = () => {
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
 
-    if (Number.isInteger(moyenneNote)) {
-      noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5');
+    if (Number.isInteger(moyenneNote)) { // Si c'est un entier
+      noteTxt.insertAdjacentText('beforeend', moyenneNote + '/5'); // On l'insère directement
     } else {
-      noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5');
+      noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5'); // Sinon on arrondi à 1 chiffre après la virgule
     }
 
     containerNote.insertAdjacentElement('beforeend', containerStars);
@@ -141,7 +149,7 @@ const placementRestos = () => {
 
       ficheResto.insertAdjacentElement('beforeend', expandContainer);
 
-      if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
+      if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte toujours le resto cliqué en première place
         document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheResto);
       }
     }
@@ -172,6 +180,5 @@ const placementRestos = () => {
     markerPosResto.addListener('click', function () {
       expand();
     });
-
   });
 }
