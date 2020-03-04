@@ -166,7 +166,7 @@ const placementRestos = () => {
           addNoteContainerStars.classList.add('container-star');
           let input = document.createElement('input');
           input.setAttribute('class', 'checkbox-add-avis');
-          input.setAttribute('type', 'checkbox');
+          input.setAttribute('type', 'radio');
           input.setAttribute('name', 'note');
           input.setAttribute('value', i);
           let span = document.createElement('span');
