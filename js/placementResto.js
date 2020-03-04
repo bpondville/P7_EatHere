@@ -85,6 +85,7 @@ const placementRestos = () => {
 
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
+    ficheResto.id = 'fiche-resto' + resto.id;
 
     let basicInfo = document.createElement('div');
     basicInfo.classList.add('basic-info');
@@ -145,21 +146,23 @@ const placementRestos = () => {
       adresse.innerText = resto.address;
       expandContainer.insertAdjacentElement('beforeend', adresse);
 
-      let addCommentContainer;
-      resto.ratings.forEach(avis => {
+      if (resto.ratings.length !== null) {
+        resto.ratings.forEach(avis => {
 
-        let note = document.createElement('p');
-        note.classList.add('note-avis');
-        note.innerText = avis.stars + '/5';
+          let note = document.createElement('p');
+          note.classList.add('note-avis');
+          note.innerText = avis.stars + '/5';
+  
+          let comment = document.createElement('p');
+          comment.classList.add('comment');
+          comment.innerText = avis.comment;
+  
+          expandContainer.insertAdjacentElement('beforeend', note);
+          expandContainer.insertAdjacentElement('beforeend', comment);
+        });
+      } 
 
-        let comment = document.createElement('p');
-        comment.classList.add('comment');
-        comment.innerText = avis.comment;
-
-        addCommentContainer = document.createElement('div');
-        addCommentContainer.classList.add('add-comment-container');
-
-        let addNote = document.createElement('div');
+      let addNote = document.createElement('div');
         addNote.classList.add('add-note');
         for (let i = 1; i <= 5; i++) {
           let addNoteContainerStars = document.createElement('div');
@@ -188,13 +191,12 @@ const placementRestos = () => {
         sendComment.setAttribute('value', 'Envoyer');
         sendComment.setAttribute('onclick', 'functionSendComment(' + resto.id + ')');
 
+        let addCommentContainer = document.createElement('div');
+        addCommentContainer.classList.add('add-comment-container');
+
         addCommentContainer.insertAdjacentElement('beforeend', addNote);
         addCommentContainer.insertAdjacentElement('beforeend', addComment);
         addCommentContainer.insertAdjacentElement('beforeend', sendComment);
-
-        expandContainer.insertAdjacentElement('beforeend', note);
-        expandContainer.insertAdjacentElement('beforeend', comment);
-      });
 
       expandContainer.insertAdjacentElement('beforeend', addCommentContainer);
 
@@ -234,9 +236,9 @@ const functionSendComment = (restoId) => {
   let note;
   let arrayCommentNote = document.querySelectorAll('.checkbox-add-avis');
 
-  arrayCommentNote.forEach(checkbox => {
-    if (checkbox.checked) {
-      note = parseInt(checkbox.value);
+  arrayCommentNote.forEach(radio => {
+    if (radio.checked) {
+      note = parseInt(radio.value);
     }
   });
 
@@ -247,10 +249,31 @@ const functionSendComment = (restoId) => {
 
   if (avis.stars !== undefined && avis.comment !== '') {
     arrayRestos[restoId].ratings.push(avis);
+
     placementRestos();
+
   } else if (avis.stars == undefined) {
     alert('Veuillez renseigner une note grace au système d\'étoiles');
   } else if (avis.comment == '') {
     alert('Veuillez ajouter un commentaire');
+  }
+}
+
+const placeNewResto = (latLng) =>  {
+  let restoName = prompt('Nom restaurant', '');
+  if (restoName == null || restoName == "") {
+    alert("Champ invalide");
+  } else {
+    let restoAdresse = prompt('Adresse du restaurant', '');
+    let newResto = {
+      "restaurantName": restoName,
+      "address": restoAdresse,
+      "lat": latLng.lat(),
+      "long": latLng.lng(),
+      "ratings": []
+    }
+    arrayRestos.push(newResto);
+    placementRestos();
+    addIdResto();
   }
 }
