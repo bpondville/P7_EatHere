@@ -165,18 +165,16 @@ const placementRestos = () => {
           let addNoteContainerStars = document.createElement('div');
           addNoteContainerStars.classList.add('container-star');
           let input = document.createElement('input');
-          input.setAttribute('class', 'checkbox');
+          input.setAttribute('class', 'checkbox-add-avis');
           input.setAttribute('type', 'checkbox');
           input.setAttribute('name', 'note');
           input.setAttribute('value', i);
           let span = document.createElement('span');
-          span.classList.add('checkmark-filtre');
+          span.classList.add('checkmark-filtre-add-avis');
           addNoteContainerStars.insertAdjacentElement('beforeend', input);
           addNoteContainerStars.insertAdjacentElement('beforeend', span);
           addNote.insertAdjacentElement('beforeend', addNoteContainerStars);
         }
-
-
 
         let addComment = document.createElement('textarea');
         addComment.setAttribute('maxlength', '255');
@@ -234,10 +232,10 @@ const placementRestos = () => {
 const functionSendComment = (restoId) => {
   let commentTxtObject = document.getElementsByName(restoId)[0];
   let note;
-  let arrayCommentNote = commentTxtObject.previousSibling.querySelectorAll('.checkbox');
+  let arrayCommentNote = document.querySelectorAll('.checkbox-add-avis');
 
   arrayCommentNote.forEach(checkbox => {
-    if (checkbox.checked === true) {
+    if (checkbox.checked) {
       note = parseInt(checkbox.value);
     }
   });
