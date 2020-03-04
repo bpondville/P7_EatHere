@@ -7,6 +7,7 @@ let request = new XMLHttpRequest();
 request.onreadystatechange = function () {
   if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
     arrayRestos = JSON.parse(this.responseText);
+    addIdResto();
     getFiltre();
     placementRestos();
   }
@@ -44,12 +45,19 @@ const getFiltre = () => {
     }
 
     for (let i = value1; i <= value2; i++) {
-      document.querySelectorAll('.checkbox')[i - 1].classList.add('active-star');
+      arrayCheckbox[i - 1].classList.add('active-star');
     }
     placementRestos();
   });
 }
 
+const addIdResto = () => {
+  id = 0;
+  arrayRestos.forEach(resto => {
+    resto.id = id;
+    id++;
+  });
+}
 
 
 /* --- FONCTION DE PLACEMENT DES RESTAURANTS --- */
@@ -78,16 +86,19 @@ const placementRestos = () => {
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
 
+    let basicInfo = document.createElement('div');
+    basicInfo.classList.add('basic-info');
+
     let h1NameResto = document.createElement('h1');
     h1NameResto.innerText = resto.restaurantName;
 
     let containerNote = document.createElement('div');
     containerNote.classList.add('container-note');
 
-    let containerStars = document.createElement('div');
-    containerStars.classList.add('container-stars');
-    containerStars.style.width = (moyenneNote * 115 / 5) + 'px';
-    containerStars.insertAdjacentHTML('beforeend', '<img class="star" src="images/moyenne.svg">');
+    let moyenneStars = document.createElement('div');
+    moyenneStars.classList.add('moyenne-stars');
+    moyenneStars.style.width = (moyenneNote * 115 / 5) + 'px';
+    moyenneStars.insertAdjacentHTML('beforeend', '<img class="star" src="images/moyenne.svg">');
 
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
@@ -98,10 +109,11 @@ const placementRestos = () => {
       noteTxt.insertAdjacentText('beforeend', moyenneNote.toFixed(1) + '/5'); // Sinon on arrondi à 1 chiffre après la virgule
     }
 
-    containerNote.insertAdjacentElement('beforeend', containerStars);
+    containerNote.insertAdjacentElement('beforeend', moyenneStars);
     containerNote.insertAdjacentElement('beforeend', noteTxt);
-    ficheResto.insertAdjacentElement('beforeend', h1NameResto);
-    ficheResto.insertAdjacentElement('beforeend', containerNote);
+    basicInfo.insertAdjacentElement('beforeend', h1NameResto);
+    basicInfo.insertAdjacentElement('beforeend', containerNote);
+    ficheResto.insertAdjacentElement('beforeend', basicInfo);
 
     if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
@@ -133,6 +145,7 @@ const placementRestos = () => {
       adresse.innerText = resto.address;
       expandContainer.insertAdjacentElement('beforeend', adresse);
 
+      let addCommentContainer;
       resto.ratings.forEach(avis => {
 
         let note = document.createElement('p');
@@ -143,13 +156,53 @@ const placementRestos = () => {
         comment.classList.add('comment');
         comment.innerText = avis.comment;
 
+        addCommentContainer = document.createElement('div');
+        addCommentContainer.classList.add('add-comment-container');
+
+        let addNote = document.createElement('div');
+        addNote.classList.add('add-note');
+        for (let i = 1; i <= 5; i++) {
+          let addNoteContainerStars = document.createElement('div');
+          addNoteContainerStars.classList.add('container-star');
+          let input = document.createElement('input');
+          input.setAttribute('class', 'checkbox');
+          input.setAttribute('type', 'checkbox');
+          input.setAttribute('name', 'note');
+          input.setAttribute('value', i);
+          let span = document.createElement('span');
+          span.classList.add('checkmark-filtre');
+          addNoteContainerStars.insertAdjacentElement('beforeend', input);
+          addNoteContainerStars.insertAdjacentElement('beforeend', span);
+          addNote.insertAdjacentElement('beforeend', addNoteContainerStars);
+        }
+
+
+
+        let addComment = document.createElement('textarea');
+        addComment.setAttribute('maxlength', '255');
+        addComment.setAttribute('placeholder', 'Donnez nous votre avis...');
+        addComment.setAttribute('name', resto.id);
+        addComment.classList.add('add-comment');
+
+        let sendComment = document.createElement('input');
+        sendComment.classList.add('send-comment');
+        sendComment.setAttribute('type', 'button');
+        sendComment.setAttribute('value', 'Envoyer');
+        sendComment.setAttribute('onclick', 'functionSendComment(' + resto.id + ')');
+
+        addCommentContainer.insertAdjacentElement('beforeend', addNote);
+        addCommentContainer.insertAdjacentElement('beforeend', addComment);
+        addCommentContainer.insertAdjacentElement('beforeend', sendComment);
+
         expandContainer.insertAdjacentElement('beforeend', note);
         expandContainer.insertAdjacentElement('beforeend', comment);
       });
 
+      expandContainer.insertAdjacentElement('beforeend', addCommentContainer);
+
       ficheResto.insertAdjacentElement('beforeend', expandContainer);
 
-      if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte toujours le resto cliqué en première place
+      if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte le resto cliqué en première place
         document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheResto);
       }
     }
@@ -173,12 +226,33 @@ const placementRestos = () => {
       arrayMarkers.push(markerPosResto);
     }
 
-    ficheResto.addEventListener('click', function () {
-      expand();
-    });
-
-    markerPosResto.addListener('click', function () {
-      expand();
-    });
+    basicInfo.addEventListener('click', expand);
+    markerPosResto.addListener('click', expand);
   });
+}
+
+const functionSendComment = (restoId) => {
+  let commentTxtObject = document.getElementsByName(restoId)[0];
+  let note;
+  let arrayCommentNote = commentTxtObject.previousSibling.querySelectorAll('.checkbox');
+
+  arrayCommentNote.forEach(checkbox => {
+    if (checkbox.checked === true) {
+      note = parseInt(checkbox.value);
+    }
+  });
+
+  let avis = {
+    "stars": note,
+    "comment": commentTxtObject.value
+  }
+
+  if (avis.stars !== undefined && avis.comment !== '') {
+    arrayRestos[restoId].ratings.push(avis);
+    placementRestos();
+  } else if (avis.stars == undefined) {
+    alert('Veuillez renseigner une note grace au système d\'étoiles');
+  } else if (avis.comment == '') {
+    alert('Veuillez ajouter un commentaire');
+  }
 }
