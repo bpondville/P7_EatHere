@@ -259,21 +259,25 @@ const functionSendComment = (restoId) => {
   }
 }
 
-const placeNewResto = (latLng) =>  {
+const placeNewResto = (latLng) => {
   let restoName = prompt('Nom restaurant', '');
   if (restoName == null || restoName == "") {
-    alert("Champ invalide");
+    alert("Aucun nom de restaurant n'a été saisi.");
   } else {
     let restoAdresse = prompt('Adresse du restaurant', '');
-    let newResto = {
-      "restaurantName": restoName,
-      "address": restoAdresse,
-      "lat": latLng.lat(),
-      "long": latLng.lng(),
-      "ratings": []
+    if (restoAdresse == null || restoAdresse == "") {
+      alert("Aucune adresse de restaurant n'a été saisie.");
+    } else {
+      let newResto = {
+        "restaurantName": restoName,
+        "address": restoAdresse,
+        "lat": latLng.lat(),
+        "long": latLng.lng(),
+        "ratings": []
+      }
+      arrayRestos.push(newResto);
+      addIdResto();
+      placementRestos();
     }
-    arrayRestos.push(newResto);
-    placementRestos();
-    addIdResto();
   }
 }
