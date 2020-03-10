@@ -1,4 +1,4 @@
-class ficheResto {
+class Resto {
   constructor(id, name, address, posLat, posLong, avis) {
     this.id = id;
     this.name = name;
@@ -32,7 +32,7 @@ class ficheResto {
   createFiche() {
     let ficheResto = document.createElement('div');
     ficheResto.classList.add('fiche-resto');
-    ficheResto.id = 'fiche-resto' + this.id;
+    ficheResto.id = this.id;
 
     let basicInfo = document.createElement('div');
     basicInfo.classList.add('basic-info');
@@ -50,6 +50,7 @@ class ficheResto {
 
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
+    noteTxt.innerText = this.moyenne + '/5';
 
     containerNote.insertAdjacentElement('beforeend', moyenneStars);
     containerNote.insertAdjacentElement('beforeend', noteTxt);
@@ -61,27 +62,49 @@ class ficheResto {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
     }
 
-     // basicInfo.addEventListener('click', this.expandFiche);
-
+    let resto = this;
+    basicInfo.addEventListener('click', function () {
+      newArrayRestos.forEach(element => {
+        element.closeFiche();
+      });
+      resto.openFiche();
+    });
   }
 
-  expandFiche() {
-    let allApercuBaliseImg = document.querySelectorAll('.apercuStreetView');
-    allApercuBaliseImg.forEach(img => {
-      img.remove();
-    });
+  placeMarker() {
+    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined)) {
+      markerPosResto = new google.maps.Marker({
+        position: this.posLatLng,
+        map: map,
+        icon: {
+          url: '../images/posResto.svg',
+          labelOrigin: new google.maps.Point(20, -8),
+        },
+        title: this.name,
+        label: {
+          text: this.name,
+          fontSize: '14px',
+          fontWeight: '500'
+        }
+      });
+      arrayMarkers.push(markerPosResto);
 
-    let allExpandContainer = document.querySelectorAll('.expand-container');
-    allExpandContainer.forEach(expand => {
-      expand.remove();
-    });
+      let resto = this;
+      markerPosResto.addListener('click', function () {
+        newArrayRestos.forEach(element => {
+          element.closeFiche();
+        });
+        resto.openFiche();
+      });
+    }
+  }
 
-    let ficheResto = document.getElementById('fiche-resto' + this.id);
-    console.log(ficheResto);
+  openFiche() {
+    let ficheHtml = document.getElementById(this.id);
 
     let apercuStreetView = document.createElement('img');
     apercuStreetView.classList.add('apercuStreetView');
-    ficheResto.insertAdjacentElement('afterbegin', apercuStreetView);
+    ficheHtml.insertAdjacentElement('afterbegin', apercuStreetView);
     let urlApercu = 'https://maps.googleapis.com/maps/api/streetview?size=240x150&location=' + this.lat + ',' + this.long + '&source=outdoor&pitch=0&key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c';
     apercuStreetView.src = urlApercu;
     apercuStreetView.style.height = '150px';
@@ -112,6 +135,7 @@ class ficheResto {
 
     let addNote = document.createElement('div');
     addNote.classList.add('add-note');
+
     for (let i = 1; i <= 5; i++) {
       let addNoteContainerStars = document.createElement('div');
       addNoteContainerStars.classList.add('container-star');
@@ -130,7 +154,7 @@ class ficheResto {
     let addComment = document.createElement('textarea');
     addComment.setAttribute('maxlength', '255');
     addComment.setAttribute('placeholder', 'Donnez nous votre avis...');
-    addComment.setAttribute('name', this.id);
+    addComment.setAttribute('name', 'comment-' + this.id);
     addComment.classList.add('add-comment');
 
     let sendComment = document.createElement('input');
@@ -148,10 +172,24 @@ class ficheResto {
 
     expandContainer.insertAdjacentElement('beforeend', addCommentContainer);
 
-    ficheResto.insertAdjacentElement('beforeend', expandContainer);
+    ficheHtml.insertAdjacentElement('beforeend', expandContainer);
 
-    if ((moyenneNote >= value1 && moyenneNote <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte le resto cliqué en première place
-      document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheResto);
+    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte le resto cliqué en première place
+      document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheHtml);
+    }
+  }
+
+  closeFiche() {
+    let ficheHtml = document.getElementById(this.id);
+    if (ficheHtml !== null) {
+      let expandContainer = ficheHtml.querySelector('.expand-container');
+      let apercuStreetView = ficheHtml.querySelector('.apercuStreetView');
+      if (expandContainer !== null) {
+        expandContainer.remove();
+      }
+      if (apercuStreetView !== null) {
+        apercuStreetView.remove();
+      }
     }
   }
 }
@@ -160,7 +198,7 @@ let newArrayRestos = [];
 
 const transformIntoClass = (tableau) => {
   for (let i = 0; i < tableau.length; i++) {
-    let resto = new ficheResto('resto' + i, arrayRestos[i].restaurantName, arrayRestos[i].address, arrayRestos[i].lat, arrayRestos[i].long, arrayRestos[i].ratings);
+    let resto = new Resto('resto' + i, arrayRestos[i].restaurantName, arrayRestos[i].address, arrayRestos[i].lat, arrayRestos[i].long, arrayRestos[i].ratings);
     newArrayRestos.push(resto);
   }
 }
@@ -170,10 +208,12 @@ const insertFiches = () => {
   arrayMarkers.forEach(marker => { // On retire tous les markers
     marker.setMap(null);
   });
+  arrayMarkers = [];
 
 
   newArrayRestos.forEach(resto => {
     resto.moyenneAvis();
     resto.createFiche();
-  })
+    resto.placeMarker();
+  });
 }
