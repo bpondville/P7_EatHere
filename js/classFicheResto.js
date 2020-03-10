@@ -27,6 +27,10 @@ class Resto {
     } else {
       this.moyenne = moyenne.toFixed(1);
     }
+
+    if (this.avis.length == 0) {
+      this.moyenne = 0;
+    }
   }
 
   createFiche() {
@@ -50,7 +54,11 @@ class Resto {
 
     let noteTxt = document.createElement('p');
     noteTxt.classList.add('note-txt');
-    noteTxt.innerText = this.moyenne + '/5';
+    if (this.moyenne == 0) {
+      noteTxt.innerText = 'Pas d\'avis';
+    } else {
+      noteTxt.innerText = this.moyenne + '/5';
+    }
 
     containerNote.insertAdjacentElement('beforeend', moyenneStars);
     containerNote.insertAdjacentElement('beforeend', noteTxt);
@@ -161,7 +169,10 @@ class Resto {
     sendComment.classList.add('send-comment');
     sendComment.setAttribute('type', 'button');
     sendComment.setAttribute('value', 'Envoyer');
-    sendComment.setAttribute('onclick', 'functionSendComment(' + this.id + ')');
+    let resto = this;
+    sendComment.addEventListener('click', function() {
+      resto.addAvis();
+    });
 
     let addCommentContainer = document.createElement('div');
     addCommentContainer.classList.add('add-comment-container');
@@ -192,28 +203,33 @@ class Resto {
       }
     }
   }
-}
 
-let newArrayRestos = [];
+  addAvis() {
+    let ficheResto = document.getElementById(this.id);
+    let arrayNote = ficheResto.querySelectorAll('.checkbox-add-avis');
+    let comment = document.getElementsByName('comment-' + this.id)[0].value;
+    let note;
 
-const transformIntoClass = (tableau) => {
-  for (let i = 0; i < tableau.length; i++) {
-    let resto = new Resto('resto' + i, arrayRestos[i].restaurantName, arrayRestos[i].address, arrayRestos[i].lat, arrayRestos[i].long, arrayRestos[i].ratings);
-    newArrayRestos.push(resto);
+    arrayNote.forEach(radio => {
+      if (radio.checked) {
+        note = parseInt(radio.value);
+      }
+    });
+
+    let avis = {
+      "stars": note,
+      "comment": comment
+    }
+
+    if (avis.stars !== undefined && avis.comment !== '') {
+      this.avis.push(avis);
+  
+      insertFiches();
+  
+    } else if (avis.stars == undefined) {
+      alert('Veuillez renseigner une note grace au système d\'étoiles');
+    } else if (avis.comment == '') {
+      alert('Veuillez ajouter un commentaire');
+    }
   }
-}
-
-const insertFiches = () => {
-  document.getElementById('container-fiches-restos').innerHTML = '';
-  arrayMarkers.forEach(marker => { // On retire tous les markers
-    marker.setMap(null);
-  });
-  arrayMarkers = [];
-
-
-  newArrayRestos.forEach(resto => {
-    resto.moyenneAvis();
-    resto.createFiche();
-    resto.placeMarker();
-  });
 }

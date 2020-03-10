@@ -16,7 +16,29 @@ let requestUrl = '../json/resto.json';
 request.open('GET', requestUrl);
 request.send();
 
+let newArrayRestos = [];
 
+const transformIntoClass = (tableau) => {
+  for (let i = 0; i < tableau.length; i++) {
+    let resto = new Resto('resto' + i, arrayRestos[i].restaurantName, arrayRestos[i].address, arrayRestos[i].lat, arrayRestos[i].long, arrayRestos[i].ratings);
+    newArrayRestos.push(resto);
+  }
+}
+
+const insertFiches = () => {
+  document.getElementById('container-fiches-restos').innerHTML = '';
+  arrayMarkers.forEach(marker => { // On retire tous les markers
+    marker.setMap(null);
+  });
+  arrayMarkers = [];
+
+
+  newArrayRestos.forEach(resto => {
+    resto.moyenneAvis();
+    resto.createFiche();
+    resto.placeMarker();
+  });
+}
 
 /* --- CREATION DU FILTRE --- */
 const getFiltre = () => {
@@ -53,34 +75,6 @@ const getFiltre = () => {
 
 /* --- FONCTION DE PLACEMENT DES RESTAURANTS --- */
 
-/* const functionSendComment = (restoId) => {
-  let commentTxtObject = document.getElementsByName(restoId)[0];
-  let note;
-  let arrayCommentNote = document.querySelectorAll('.checkbox-add-avis');
-
-  arrayCommentNote.forEach(radio => {
-    if (radio.checked) {
-      note = parseInt(radio.value);
-    }
-  });
-
-  let avis = {
-    "stars": note,
-    "comment": commentTxtObject.value
-  }
-
-  if (avis.stars !== undefined && avis.comment !== '') {
-    arrayRestos[restoId].ratings.push(avis);
-
-    placementRestos();
-
-  } else if (avis.stars == undefined) {
-    alert('Veuillez renseigner une note grace au système d\'étoiles');
-  } else if (avis.comment == '') {
-    alert('Veuillez ajouter un commentaire');
-  }
-}
-
 const placeNewResto = (latLng) => {
   let restoName = prompt('Nom restaurant', '');
   if (restoName == null || restoName == "") {
@@ -97,9 +91,12 @@ const placeNewResto = (latLng) => {
         "long": latLng.lng(),
         "ratings": []
       }
-      arrayRestos.push(newResto);
-      addIdResto();
-      placementRestos();
+
+      let idNewResto = newArrayRestos.length;
+      let resto = new Resto('resto' + idNewResto, restoName, restoAdresse, latLng.lat(), latLng.lng(), []);
+      newArrayRestos.push(resto);
+      console.log(newArrayRestos);
+      insertFiches();
     }
   }
-} */
+}
