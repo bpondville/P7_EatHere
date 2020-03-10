@@ -14,13 +14,11 @@ class Resto {
 
   moyenneAvis() {
     let totalNote = 0;
-    let nbrNote = 0;
     let moyenne;
     this.avis.forEach(avis => {
       totalNote += avis.stars;
-      nbrNote++;
     });
-    moyenne = totalNote / nbrNote;
+    moyenne = totalNote / this.avis.length;
 
     if (Number.isInteger(moyenne)) {
       this.moyenne = moyenne;
@@ -30,6 +28,14 @@ class Resto {
 
     if (this.avis.length == 0) {
       this.moyenne = 0;
+    }
+  }
+
+  filtrageOk() { // Return true si le restaurant est à afficher
+    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined) || (this.moyenne == 0 && value1 !== undefined && value2 !== undefined)) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -66,21 +72,22 @@ class Resto {
     basicInfo.insertAdjacentElement('beforeend', containerNote);
     ficheResto.insertAdjacentElement('beforeend', basicInfo);
 
-    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined)) {
+    if (this.filtrageOk()) {
       document.getElementById('container-fiches-restos').insertAdjacentElement('beforeend', ficheResto);
     }
 
-    let resto = this;
+    let restoClicked = this;
     basicInfo.addEventListener('click', function () {
-      newArrayRestos.forEach(element => {
-        element.closeFiche();
+      newArrayRestos.forEach(restaurant => {
+        restaurant.closeFiche();
       });
-      resto.openFiche();
+      restoClicked.openFiche();
     });
   }
 
   placeMarker() {
-    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined)) {
+    let markerPosResto;
+    if (this.filtrageOk()) {
       markerPosResto = new google.maps.Marker({
         position: this.posLatLng,
         map: map,
@@ -97,12 +104,12 @@ class Resto {
       });
       arrayMarkers.push(markerPosResto);
 
-      let resto = this;
+      let restoClicked = this;
       markerPosResto.addListener('click', function () {
-        newArrayRestos.forEach(element => {
-          element.closeFiche();
+        newArrayRestos.forEach(restaurant => {
+          restaurant.closeFiche();
         });
-        resto.openFiche();
+        restoClicked.openFiche();
       });
     }
   }
@@ -113,8 +120,7 @@ class Resto {
     let apercuStreetView = document.createElement('img');
     apercuStreetView.classList.add('apercuStreetView');
     ficheHtml.insertAdjacentElement('afterbegin', apercuStreetView);
-    let urlApercu = 'https://maps.googleapis.com/maps/api/streetview?size=240x150&location=' + this.lat + ',' + this.long + '&source=outdoor&pitch=0&key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c';
-    apercuStreetView.src = urlApercu;
+    apercuStreetView.src = 'https://maps.googleapis.com/maps/api/streetview?size=240x150&location=' + this.lat + ',' + this.long + '&source=outdoor&pitch=0&key=AIzaSyDKJJxXADSpQI0s4NbC-bHlFWJKxeqwg5c';
     apercuStreetView.style.height = '150px';
 
     let expandContainer = document.createElement('div');
@@ -144,16 +150,19 @@ class Resto {
     let addNote = document.createElement('div');
     addNote.classList.add('add-note');
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 5; i++) { // Création du système d'étoiles pour l'ajout d'un avis
       let addNoteContainerStars = document.createElement('div');
       addNoteContainerStars.classList.add('container-star');
+
       let input = document.createElement('input');
       input.setAttribute('class', 'checkbox-add-avis');
       input.setAttribute('type', 'radio');
       input.setAttribute('name', 'note');
       input.setAttribute('value', i);
+
       let span = document.createElement('span');
       span.classList.add('checkmark-filtre-add-avis');
+
       addNoteContainerStars.insertAdjacentElement('beforeend', input);
       addNoteContainerStars.insertAdjacentElement('beforeend', span);
       addNote.insertAdjacentElement('beforeend', addNoteContainerStars);
@@ -169,6 +178,7 @@ class Resto {
     sendComment.classList.add('send-comment');
     sendComment.setAttribute('type', 'button');
     sendComment.setAttribute('value', 'Envoyer');
+
     let resto = this;
     sendComment.addEventListener('click', function() {
       resto.addAvis();
@@ -180,12 +190,10 @@ class Resto {
     addCommentContainer.insertAdjacentElement('beforeend', addNote);
     addCommentContainer.insertAdjacentElement('beforeend', addComment);
     addCommentContainer.insertAdjacentElement('beforeend', sendComment);
-
     expandContainer.insertAdjacentElement('beforeend', addCommentContainer);
-
     ficheHtml.insertAdjacentElement('beforeend', expandContainer);
 
-    if ((this.moyenne >= value1 && this.moyenne <= value2) || (value1 == undefined && value2 == undefined)) { // On remonte le resto cliqué en première place
+    if (this.filtrageOk()) { // On remonte le resto cliqué en première place
       document.getElementById('container-fiches-restos').insertAdjacentElement('afterbegin', ficheHtml);
     }
   }
@@ -230,6 +238,6 @@ class Resto {
       alert('Veuillez renseigner une note grace au système d\'étoiles');
     } else if (avis.comment == '') {
       alert('Veuillez ajouter un commentaire');
-    }
+    } 
   }
 }

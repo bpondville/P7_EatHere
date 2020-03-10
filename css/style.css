@@ -3,7 +3,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: gainsboro;
   overflow: hidden;
 }
 
@@ -99,6 +98,8 @@ h1 {
   border-top: solid 1px black;
   margin-top: 15px;
   padding: 15px 10px 5px 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .comment {
@@ -133,6 +134,13 @@ h1 {
   height: 20px;
 }
 
-/* .send-comment {
+.send-comment {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: none;
+  padding: 10px;
+  outline: none;
+}
 
-} */
+.send-comment:hover {
+  background-color: rgba(0, 0, 0, 0.10);
+}
