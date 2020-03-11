@@ -82,6 +82,10 @@ function initMap() {
     ]
   });
 
+  map.addListener('click', function(e) {
+    placeNewResto(e.latLng);
+  });
+
   infoWindow = new google.maps.InfoWindow;
 
   // Try HTML5 geolocation.

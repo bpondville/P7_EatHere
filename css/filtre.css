@@ -10,7 +10,7 @@
   cursor: pointer;
 }
 
-.container-star input {
+.container-star .checkbox, .checkbox-add-avis {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -20,7 +20,7 @@
   margin: 0;
 }
 
-.checkmark-filtre {
+.checkmark-filtre, .checkmark-filtre-add-avis {
   position: absolute;
   top: 0;
   left: 0;
@@ -32,6 +32,6 @@
   opacity: 40%;
 }
 
-.container-star:hover input ~ .checkmark-filtre, .container-star input:checked ~ .checkmark-filtre, .active-star ~ .checkmark-filtre {
+.container-star:hover .checkbox ~ .checkmark-filtre, .container-star .checkbox:checked ~ .checkmark-filtre, .active-star ~ .checkmark-filtre, .container-star:hover .checkbox-add-avis ~ .checkmark-filtre-add-avis, .container-star .checkbox-add-avis:checked ~ .checkmark-filtre-add-avis {
   opacity: 100%;
 }
